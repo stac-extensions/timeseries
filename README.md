@@ -21,10 +21,11 @@ STAC item representing a temporal series dataset should use this extension to pr
 
 ## Item Properties and Collection Fields
 
-| Field Name | Type      | Description                                                                                                                                                                    |
-| ---------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| ts:period  | string    | string representing a recurring time interval with repeating rules                                                                                                             |
-| ts:dates   | \[string] | List of the dates represented in the time series datasets. It is formatted as date-time according to [RFC 3339, section 5.6](https://tools.ietf.org/html/rfc3339#section-5.6). |
+| Field Name    | Type      | Description                                                                                                                                                                    |
+| ------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| ts:period     | string    | string representing a recurring time interval with repeating rules                                                                                                             |
+| ts:dates      | \[string] | List of the dates represented in the time series datasets. It is formatted as date-time according to [RFC 3339, section 5.6](https://tools.ietf.org/html/rfc3339#section-5.6). |
+| ts:parameters | \[string] | List of parameters or variables in the time series                                                                                                                             |
 
 One of `ts:period` or `ts:dates` is **REQUIRED**.
 
@@ -49,14 +50,15 @@ Some examples:
 
 This extension extends the Link Object used in all STAC entities (Catalogs, Collections, Items). It requires specific relation types to be set for the `rel` field in the Link Object.
 
-### Coverage JSON
+### Coverage
 
 Links to a [Coverage JSON](https://covjson.org) document.
 
 | Field Name | Type   | Description                                                                            |
 | ---------- | ------ | -------------------------------------------------------------------------------------- |
-| rel        | string | **REQUIRED**. Must be set to `covjson`.                                                |
+| rel        | string | **REQUIRED**. Must be set to `coverage`.                                               |
 | href       | string | **REQUIRED**. Link to the Coverage JSON document.                                      |
+| type       | string | **REQUIRED**. Type of the coverage (e.g `application/prs.coverage+json`).              |
 | ts:api     | string | If applicable, the code of the API producing the document (See below for more details) |
 
 #### Coverage JSON APIs
@@ -65,7 +67,7 @@ Links to a [Coverage JSON](https://covjson.org) document.
 | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | wcs              | [WCS2.0 getCoverage request](https://docs.geoserver.org/stable/en/user/community/cov-json/index.html#example-wcs-2-0-timeseries) model |
 | ogcapi-coverages | OGC API [Coverages](https://github.com/opengeospatial/ogcapi-coverages)                                                                |
-| egms             | European Ground Motion Service API (reference to be added)                                                                             |
+| egms             | [European Ground Motion Service](https://land.copernicus.eu/pan-european/european-ground-motion-service) API                           |
 
 
 ## Contributing
