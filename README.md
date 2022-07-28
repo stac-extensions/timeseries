@@ -1,14 +1,17 @@
-# Template Extension Specification
+# Time Series Extension Specification
 
-- **Title:** Template
-- **Identifier:** <https://stac-extensions.github.io/template/v1.0.0/schema.json>
-- **Field Name Prefix:** template
+- **Title:** Time Series
+- **Identifier:** <https://stac-extensions.github.io/timeseries/v1.0.0/schema.json>
+- **Field Name Prefix:** ts
 - **Scope:** Item, Collection
 - **Extension [Maturity Classification](https://github.com/radiantearth/stac-spec/tree/master/extensions/README.md#extension-maturity):** Proposal
-- **Owner**: @your-gh-handles @person2
+- **Owner**: @emmanuelmathot
 
-This document explains the Template Extension to the [SpatioTemporal Asset Catalog](https://github.com/radiantearth/stac-spec) (STAC) specification.
-This is the place to add a short introduction.
+This document explains the Time Series Extension to the [SpatioTemporal Asset Catalog](https://github.com/radiantearth/stac-spec) (STAC) specification.
+STAC item representing a temporal series dataset should use this extension to provide additional information about the time series. Typical use cases include:
+
+- [MODIS Vegetation Index Products](https://modis.gsfc.nasa.gov/data/dataprod/mod13.php)  
+- Water Levels (e.g. [Copernicus Global Land Service Water Level](https://land.copernicus.eu/global/products/wl))
 
 - Examples:
   - [Item example](examples/item.json): Shows the basic usage of the extension in a STAC Item
@@ -18,36 +21,52 @@ This is the place to add a short introduction.
 
 ## Item Properties and Collection Fields
 
-| Field Name           | Type                      | Description |
-| -------------------- | ------------------------- | ----------- |
-| template:new_field   | string                    | **REQUIRED**. Describe the required field... |
-| template:xyz         | [XYZ Object](#xyz-object) | Describe the field... |
-| template:another_one | \[number]                 | Describe the field... |
+| Field Name | Type      | Description                                                                                                                                                                    |
+| ---------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| ts:period  | \[string] | List of the dates represented in the time series datasets. It is formatted as date-time according to [RFC 3339, section 5.6](https://tools.ietf.org/html/rfc3339#section-5.6). |
+| ts:dates   | \[string] | List of the dates represented in the time series datasets. It is formatted as date-time according to [RFC 3339, section 5.6](https://tools.ietf.org/html/rfc3339#section-5.6). |
+
+One of `ts:period` or `ts:dates` is **REQUIRED**.
 
 ### Additional Field Information
 
-#### template:new_field
+There are 2 main date representations in the time series extension:
 
-This is a much more detailed description of the field `template:new_field`...
+- **Continuous time series**: The time series is continuous and the dates are represented by a recurring time interval with repeating rules in the field [`ts:period`](#tsperiod). 
+- **Discrete time series**: The time series is discrete and the dates are represented by a list of dates in the field [`ts:dates`](#tsdates).
 
-### XYZ Object
+In both cases, it is also recommended that period covered by the time series is defined by the first and last date of the time series using the [Date and Time Range](https://github.com/radiantearth/stac-spec/blob/master/item-spec/common-metadata.md#date-and-time-range) fields
 
-This is the introduction for the purpose and the content of the XYZ Object...
+#### ts:period
 
-| Field Name  | Type   | Description |
-| ----------- | ------ | ----------- |
-| x           | number | **REQUIRED**. Describe the required field... |
-| y           | number | **REQUIRED**. Describe the required field... |
-| z           | number | **REQUIRED**. Describe the required field... |
+This is the duration of the time series. It is formatted as [repeating intervals](https://staging.standards.calconnect.org/csd/cc-18012.html#toc18). They are formed by adding `R[n]/` to the beginning of an interval expression, where `R` is used as the letter itself and `[n]` is replaced by the number of repetitions. Leaving out the value for `[n]` or specifying a value of `-1`, means an unbounded number of repetitions.
+
+Some examples:
+
+- `R12/20150929T140000/F2W` means every 2 weeks for 12 times starting on `2015-09-29T14:00:00Z`
 
 ## Relation types
 
-The following types should be used as applicable `rel` types in the
-[Link Object](https://github.com/radiantearth/stac-spec/tree/master/item-spec/item-spec.md#link-object).
+This extension extends the Link Object used in all STAC entities (Catalogs, Collections, Items). It requires specific relation types to be set for the `rel` field in the Link Object.
 
-| Type                | Description |
-| ------------------- | ----------- |
-| fancy-rel-type      | This link points to a fancy resource. |
+### Coverage JSON
+
+Links to a [Coverage JSON](https://covjson.org) document.
+
+| Field Name | Type   | Description                                                                            |
+| ---------- | ------ | -------------------------------------------------------------------------------------- |
+| rel        | string | **REQUIRED**. Must be set to `covjson`.                                                |
+| href       | string | **REQUIRED**. Link to the Coverage JSON document.                                      |
+| ts:api     | string | If applicable, the code of the API producing the document (See below for more details) |
+
+#### Coverage JSON APIs
+
+| API code         | Description                                                                                                                            |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| wcs              | [WCS2.0 getCoverage request](https://docs.geoserver.org/stable/en/user/community/cov-json/index.html#example-wcs-2-0-timeseries) model |
+| ogcapi-coverages | OGC API [Coverages](https://github.com/opengeospatial/ogcapi-coverages)                                                              |
+| egms             | European Ground Motion Service API (reference to be added)                                                                             |
+
 
 ## Contributing
 
