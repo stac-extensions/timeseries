@@ -23,7 +23,7 @@ STAC item representing a temporal series dataset should use this extension to pr
 
 | Field Name | Type      | Description                                                                                                                                                                    |
 | ---------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| ts:period  | \[string] | List of the dates represented in the time series datasets. It is formatted as date-time according to [RFC 3339, section 5.6](https://tools.ietf.org/html/rfc3339#section-5.6). |
+| ts:period  | string    | string representing a recurring time interval with repeating rules                                                                                                             |
 | ts:dates   | \[string] | List of the dates represented in the time series datasets. It is formatted as date-time according to [RFC 3339, section 5.6](https://tools.ietf.org/html/rfc3339#section-5.6). |
 
 One of `ts:period` or `ts:dates` is **REQUIRED**.
@@ -64,7 +64,7 @@ Links to a [Coverage JSON](https://covjson.org) document.
 | API code         | Description                                                                                                                            |
 | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | wcs              | [WCS2.0 getCoverage request](https://docs.geoserver.org/stable/en/user/community/cov-json/index.html#example-wcs-2-0-timeseries) model |
-| ogcapi-coverages | OGC API [Coverages](https://github.com/opengeospatial/ogcapi-coverages)                                                              |
+| ogcapi-coverages | OGC API [Coverages](https://github.com/opengeospatial/ogcapi-coverages)                                                                |
 | egms             | European Ground Motion Service API (reference to be added)                                                                             |
 
 
